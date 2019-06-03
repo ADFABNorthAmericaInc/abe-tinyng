@@ -16,7 +16,7 @@ then `npm i`
 abe.json
 ```
 "tinpypng": {
-  "ApiKey": "7xz5OXWbBCycboaRQQrgdHCLMp_YPGAB",
+  "ApiKey": "TINYPNG_API_KEY,
   "minSize": 500
 },
 
