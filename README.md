@@ -21,6 +21,6 @@ abe.json
 },
 
 "upload": {
-  "image": "magazine/imagerie"
+  "image": "path/to/uploaded/images"
 },
 ```
