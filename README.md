@@ -24,3 +24,9 @@ abe.json
   "image": "path/to/uploaded/images"
 },
 ```
+
+## Use
+
+Copy ./node_modules/abe-tinypng/custom to rootFolder custom
+
+Now on the backoffice there will be a button on the left `Start Tinypng` to launch Tinypng script
