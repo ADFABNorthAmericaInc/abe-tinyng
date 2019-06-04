@@ -17,7 +17,7 @@ abe.json
 ```
 "tinpypng": {
   "ApiKey": "TINYPNG_API_KEY,
-  "minSize": 500
+  "minSize": 500000
 },
 
 "upload": {
