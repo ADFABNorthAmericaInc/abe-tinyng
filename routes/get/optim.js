@@ -1,5 +1,3 @@
-'use strict';
-
 const execSh = require('exec-sh');
 const path = require('path');
 
@@ -10,11 +8,13 @@ var route = function route(req, res, next, abe) {
   
   if(req.query && req.query.generate) {
     var imagePath = path.join(abe.config.root, abe.config.publish.url, abe.config.upload.image);
+    process.stdout.write('\033c');
     execSh(`sh ../../shell/tinypng.sh ${imagePath} ${abe.config.tinpypng.ApiKey} ${abe.config.tinpypng.minSize}`, { cwd: __dirname }, function(err){
       if (err) {
         console.log("Exit code: ", err.code);
         return;
       }
+      console.log('finished');
       res.send(JSON.stringify({
         ok: 1
       }));

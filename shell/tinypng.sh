@@ -1,4 +1,7 @@
 #!/bin/bash
+PURPLE='\033[0;35m'
+RED='\033[0;31m'
+NC='\033[0m'
 
 # Make sure source dir is supplied
 if [ -z "$1" ]
@@ -43,6 +46,7 @@ if [ ! -d "$OUTDIRNAME" ]; then
     mkdir $OUTDIRNAME   
 fi
  
+start=`date +%s`
 # Begin optimizing images
 cd $INDIR
 shopt -s nullglob
@@ -51,9 +55,11 @@ do
     SIZE="$(wc -c <"$file")"
     if [ "$SIZE" -gt "$MINSIZE" ]; then
       Cfile=`curl https://api.tinify.com/shrink --user api:$TINYAPIKEY --data-binary @"${file}" --dump-header /dev/stdout --silent | grep location | awk '{print $2 }'`
+      Ccurl=Cfile
       Cfile=${Cfile// }
       Cfile=`echo -n "$Cfile"| sed s/.$//`
-      curl $Cfile -o "${OUTDIRNAME}/${file}" --silent
+      # curl $Cfile -o "${OUTDIRNAME}/${file}" --silent || echo "${RED}------------------------\nERROR: $file\nCfile:$Cfile\nCcurl:$Ccurl ${NC}"
+      curl $Cfile -o "${OUTDIRNAME}/${file}" --silent || cp $file $OUTDIRNAME/$file
     fi
     if [ "$SIZE" -le "$MINSIZE" ]; then
       cp $file $OUTDIRNAME/$file
@@ -63,3 +69,9 @@ done
 cd $DIR
 mv $INDIR "${FOLDER}_old"
 mv $OUTDIRNAME "${DIR}/${FOLDER}"
+
+end=`date +%s`
+runtime=$((end-start))
+
+# clear && printf '\e[3J'
+printf "${PURPLE}Images optimized${NC} 👍 time: %02dh:%02dm:%02ds\n" $(($runtime/3600)) $(($runtime%3600/60)) $(($runtime%60))
