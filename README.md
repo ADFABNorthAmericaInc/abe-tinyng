@@ -5,7 +5,7 @@
 package.json
 ```
 "dependencies": {
-  "abe-tinypng": "github:AdFabConnect/abe-tinypng"
+  "abe-tinypng": "github:ADFABNorthAmericaInc/abe-tinypng"
 },
 ```
 
