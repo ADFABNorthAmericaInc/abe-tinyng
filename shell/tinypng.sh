@@ -55,8 +55,8 @@ do
     SIZE="$(wc -c <"$file")"
     if [ "$SIZE" -gt "$MINSIZE" ]; then
       Cfile=`curl https://api.tinify.com/shrink --user api:$TINYAPIKEY --data-binary @"${file}" --dump-header /dev/stdout --silent | grep location | awk '{print $2 }'`
-      Ccurl=Cfile
-      Cfile=${Cfile// }
+      # Ccurl=Cfile
+      # Cfile=${Cfile// }
       Cfile=`echo -n "$Cfile"| sed s/.$//`
       # curl $Cfile -o "${OUTDIRNAME}/${file}" --silent || echo "${RED}------------------------\nERROR: $file\nCfile:$Cfile\nCcurl:$Ccurl ${NC}"
       curl $Cfile -o "${OUTDIRNAME}/${file}" --silent || cp $file $OUTDIRNAME/$file
