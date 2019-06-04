@@ -1,5 +1,5 @@
 {
-  "name": "abe-packagz",
+  "name": "abe-tinypng",
   "version": "1.0.0",
   "description": "This plugin use tinypng api to compress image",
   "main": "index.js",
