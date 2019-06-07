@@ -53,7 +53,7 @@ start=`date +%s`
 # Begin optimizing images
 cd $INDIR
 # count file over minimum file size, use a tmp file to write the counter to use inside child bash function
-count=$(find . -type f -size $MINSIZE | wc -l | awk '{print $1}')
+count=$(find . -maxdepth 1 -type f -size $MINSIZE | wc -l | awk '{print $1}')
 TEMPFILE=/tmp/$$.tmp
 echo $count > $TEMPFILE
 
@@ -84,7 +84,7 @@ optimize () {
   fi
 }
 
-find . -type f -size $MINSIZE -print0 | while read -d $'\0' file
+find . -maxdepth 1 -type f -size $MINSIZE -print0 | while read -d $'\0' file
 do
   optimize $file  &
   SLEEPCOUNT=$((SLEEPCOUNT-1))
