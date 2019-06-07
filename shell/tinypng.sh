@@ -1,5 +1,6 @@
 #!/bin/bash
 PURPLE='\033[0;35m'
+GREEN='\033[0;32m'
 RED='\033[0;31m'
 NC='\033[0m'
 
@@ -57,8 +58,6 @@ count=$(find . -maxdepth 1 -type f -size $MINSIZE | wc -l | awk '{print $1}')
 TEMPFILE=/tmp/$$.tmp
 echo $count > $TEMPFILE
 
-printf "${PURPLE}Number of file to optimize ${count}${NC}"
-
 # @param $1 = image filename
 optimize () {
   # curl tinify.com and catch response header, grep location > to Cfile variable (= url of the file tinified)
@@ -68,18 +67,19 @@ optimize () {
   curl -n --insecure $Cfile -o "${OUTDIRNAME}/${file}" --silent || cp $file $OUTDIRNAME/$file
   COUNTER=$[$(cat $TEMPFILE) - 1]
   echo $COUNTER > $TEMPFILE
+  end=`date +%s`
+  runtime=$((end-start))
+  percent=$(awk "BEGIN { pc=100-(${COUNTER}/${count}*100); i=int(pc); print (pc-i<0.5)?i:i+1 }")
+  printf "\033c${PURPLE}Number of file to optimize ${COUNTER} / ${count}${NC} ${percent}%% %02dh:%02dm:%02ds\n" $(($runtime/3600)) $(($runtime%3600/60)) $(($runtime%60))
   # when counter is equal to zero, rename file and print the end
-  if [ "$COUNTER" -eq "0" ]; then
+  if [ "$COUNTER" -le "0" ]; then
     cd $DIR 
     mkdir "${INDIR}_old"
     cp -r $INDIR/ "${FOLDER}_old/"
     sleep 3s
     rsync -a $OUTDIRNAME/ $INDIR/
-    # mv $OUTDIRNAME "${DIR}/${FOLDER}"
     rm -rf $OUTDIRNAME
-    end=`date +%s`
-    runtime=$((end-start))
-    printf "${PURPLE}Images optimized${NC} 👍 time: %02dh:%02dm:%02ds\n" $(($runtime/3600)) $(($runtime%3600/60)) $(($runtime%60))
+    printf "${GREEN}Images optimized${NC} 👍"
     unlink $TEMPFILE
   fi
 }
